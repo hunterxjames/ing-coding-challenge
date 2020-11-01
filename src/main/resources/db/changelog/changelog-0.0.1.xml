@@ -1,0 +1,84 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="user-sequence-0.0.1" author="fredrikjames@gmail.com" >
+        <createSequence
+                incrementBy="1"
+                sequenceName="user_sequence"
+        />
+    </changeSet>
+
+    <changeSet id="roles-0.0.1" author="fredrikjames@gmail.com">
+        <createTable tableName="ROLES">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column name="name" type="varchar(10)" ></column>
+        </createTable>
+        <addAutoIncrement
+                columnDataType="int"
+                columnName="id"
+                incrementBy="1"
+                startWith="1"
+                tableName="ROLES"/>
+    </changeSet>
+
+    <changeSet id="users-0.0.1" author="fredrikjames@gmail.com">
+        <createTable tableName="USERS">
+            <column name="id" type="bigint" >
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column name="username" type="varchar(50)" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="title" type="varchar(10)" ></column>
+            <column name="first_name" type="varchar(200)" ></column>
+            <column name="last_name" type="varchar(200)" ></column>
+            <column name="gender" type="varchar(10)" ></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="addresses-0.0.1" author="fredrikjames@gmail.com">
+        <createTable tableName="ADDRESS">
+            <column name="user_id" type="bigint" >
+                <constraints  primaryKey="true"  nullable="false" foreignKeyName="FK_ADDRESS_USERID" references="users(id)"/>
+            </column>
+            <column name="street" type="varchar(255)" ></column>
+            <column name="city" type="varchar(255)" ></column>
+            <column name="state" type="varchar(100)" ></column>
+            <column name="postcode" type="int" ></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="users_roles-0.0.1" author="fredrikjames@gmail.com">
+        <createTable tableName="USERS_ROLES">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="FK_USERS_ROLES_USERID" references="users(id)" />
+            </column>
+            <column name="role_id" type="int">
+                <constraints nullable="false" foreignKeyName="FK_USERS_ROLES_ROLEID" references="roles(id)" />
+            </column>
+        </createTable>
+        <addAutoIncrement
+                columnDataType="int"
+                columnName="id"
+                incrementBy="1"
+                startWith="1"
+                tableName="USERS_ROLES"/>
+    </changeSet>
+
+    <changeSet id="insert-data-0.0.1" author="fredrikjames@gmail.com">
+        <sqlFile path="db/changelog/data-0.0.1.sql" />
+    </changeSet>
+
+
+</databaseChangeLog>
